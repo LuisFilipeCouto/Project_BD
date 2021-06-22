@@ -16,7 +16,7 @@ The [**Database**](Database_SQL) is implemented in TSQL, using SQL Server Manage
     <br/><br/>
     
 ### Detailed description/usage
-Read the project report -> [**Projeto_BD.pdf**](Projeto_BD).
+Read the project report -> [**Projeto_BD.pdf**](Report_BD).
 
 ### Programming/Scripting/Markup Languages
 `C#` `TSQL` 
