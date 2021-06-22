@@ -1123,7 +1123,6 @@ namespace Final_Project
             SqlCommand cmd = new SqlCommand("proj.sellMarketItem", cn);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Clear();
-            cmd.Parameters.Add("@Seller_ID", SqlDbType.Int).Value = AppUser_ID;
             cmd.Parameters.Add("@Item_UUID", SqlDbType.NVarChar).Value = UUID;
 
             try

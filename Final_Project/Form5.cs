@@ -117,6 +117,7 @@ namespace Final_Project
             buttonCancelarEditarJogo.Visible = false;
             buttonConfirmarAddApp.Visible = false;
             buttonCancelarAddApp.Visible = false;
+            buttonEditarPublicadora.Enabled = false;
             HideToolEdit();
         }
 
@@ -909,6 +910,7 @@ namespace Final_Project
             checkedListBoxJogoTipo.Visible = false;
             textBoxJogoNome.ReadOnly = true;
             textBoxJogoDescricao.ReadOnly = true;
+            checkedListBoxAppOS.Visible = false;
         }
 
         private void buttonConfirmarEditarJogo_Click(object sender, EventArgs e)
@@ -948,6 +950,7 @@ namespace Final_Project
                 labelJogoAno.Visible = false;
                 textBoxJogoNome.ReadOnly = true;
                 textBoxJogoDescricao.ReadOnly = true;
+                checkedListBoxAppOS.Visible = false;
                 checkedListBoxJogoOS.Visible = false;
                 checkedListBoxJogoTipo.Visible = false;
                 ClearGameFields();
@@ -1100,10 +1103,9 @@ namespace Final_Project
                 cn.Close();
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //"Erro ao editar Aplicação - OPERAÇÃO CANCELADA!"
-                MessageBox.Show(ex.ToString(), "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Erro ao editar Aplicação - OPERAÇÃO CANCELADA!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return 0;
             }
             return 1;
@@ -1393,7 +1395,7 @@ namespace Final_Project
                 buttonConfirmarAddApp.Visible = false;
                 buttonCancelarAddApp.Visible = false;
                 buttonEditarApp.Visible = true;
-                textBoxJogoID.Visible = true;
+                textBoxAppID.Visible = true;
                 labelAppID.Visible = true;
                 comboBoxVersao.Visible = false;
                 comboBoxAppDia.Visible = false;

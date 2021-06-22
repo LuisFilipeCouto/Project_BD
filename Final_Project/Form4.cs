@@ -472,6 +472,7 @@ namespace Final_Project
         private void buttonLimpar_Click(object sender, EventArgs e)
         {
             ClearFields();
+            buttonDetalhes.Enabled = false;
             listBoxUtilizadoresRegistados.Items.Clear();
             textBoxProcurar.Clear();
             LoadRegisteredUser();

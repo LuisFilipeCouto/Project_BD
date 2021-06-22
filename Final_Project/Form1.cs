@@ -12,7 +12,6 @@ namespace Final_Project
 {
     public partial class Form1 : Form
     {
-        //private readonly string connectionString = "Server = DESKTOP-IEU97PU\\LUIS_SQL_SERVER; database = p1g6; Trusted_Connection=True";
         private readonly string connectionString = "data source = tcp:mednat.ieeta.pt\\SQLSERVER,8101; initial catalog = p1g6; uid = p1g6; password = AveiroPortugal123-";
 
         public Form1()

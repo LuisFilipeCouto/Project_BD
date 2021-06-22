@@ -280,10 +280,9 @@ namespace Final_Project
                 cmd.ExecuteNonQuery();
                 cn.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //"Erro ao editar Item - OPERAÇÃO CANCELADA!"
-                MessageBox.Show(ex.ToString(), "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Erro ao editar Item - OPERAÇÃO CANCELADA!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return 0;
             }
             return 1;

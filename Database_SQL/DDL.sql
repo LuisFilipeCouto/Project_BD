@@ -50,7 +50,7 @@ CREATE TABLE proj.AppUser(
 	Balance			DECIMAL(19, 4)	NOT NULL	DEFAULT 0,
 	PRIMARY KEY(ID),
 	CHECK(Balance >= 0),
-	CHECK(Sex IN(' ', 'F', 'M'))
+	CHECK(Sex IN(' ', 'F', 'M')) -- F->Feminino, M ->Masculino, ''->Não Indicado
 );
 GO
 ;
@@ -63,7 +63,7 @@ CREATE TABLE proj.Publisher(
 	City			NVARCHAR(255)	NOT NULL,
 	Country			NVARCHAR(32)	NOT NULL,
 	Found_Date		DATE			NOT NULL	DEFAULT	CURRENT_TIMESTAMP,
-	IsAllowed		BIT				NOT NULL	DEFAULT '1',  -- 0->Not allowed on store, 1-->Allowed on store
+	IsAllowed		BIT				NOT NULL	DEFAULT '1',  -- 0->Não permitido na Loja, 1-->Permitido na Loja
 	PRIMARY KEY(NIPC),
 	CHECK(LEN(NIPC)=9 AND ISNUMERIC(NIPC)='1')
 );
@@ -78,7 +78,7 @@ CREATE TABLE proj.Software(
 	Class			CHAR(1)			NOT NULL,
 	Publisher_NIPC	CHAR(9),
 	PRIMARY KEY(ID),
-	CHECK(Class IN('T', 'G')) -- T-->Tool, G-->Game
+	CHECK(Class IN('T', 'G')) -- T-->Aplicação, G-->Jogo
 );
 GO
 ;
@@ -119,7 +119,7 @@ GO
 CREATE TABLE proj.Item_Category(
 	ID				INT				NOT NULL	IDENTITY(1,1),
 	Category_Name	NVARCHAR(64)	NOT NULL	UNIQUE,
-	CanBeSold		BIT				NOT NULL	DEFAULT '0',
+	CanBeSold		BIT				NOT NULL	DEFAULT '0', -- 0->Pode ser vendido no mercado, 1-->Nao pode ser vendido no mercado
 	PRIMARY KEY(ID)
 );
 GO
@@ -136,7 +136,7 @@ CREATE TABLE proj.Item(
 	PRIMARY KEY(UUID),
 	CHECK(Rarity >=0 AND Rarity <=5),
 	CHECK(Market_Value >= 0.01),
-	CHECK(ForSale IN('Y', 'N'))
+	CHECK(ForSale IN('Y', 'N')) -- Y-> Esta a venda no Mercado, N -> Nao esta a venda no Mercado
 );
 GO
 ;

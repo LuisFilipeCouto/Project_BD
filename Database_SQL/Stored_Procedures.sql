@@ -3,61 +3,61 @@ GO
 ;
 
 -------------------------------QUERIES-------------------------------
-CREATE PROC proj.searchAppUser(@StringFind NVARCHAR(128)) --OBTER QUALQUER UTILIZADOR ONDE ID, FNAME, LNAME OU EMAIL CONTENHAM @StringFind
+CREATE PROC proj.searchAppUser(@StringFind NVARCHAR(128))
 AS
-	SELECT	@StringFind = '%' + RTRIM(@StringFind) + '%';  
+	SELECT	@StringFind = '%' + RTRIM(@StringFind) + '%'; --retirar trailing spaces
 	SELECT	* 
 	FROM	proj.AppUser
 	WHERE	(ID LIKE @StringFind) OR (Email LIKE @StringFind)  OR (Fname LIKE @StringFind) OR (Lname LIKE @StringFind);
 GO
 ;
 
-CREATE PROC proj.searchNonFriend(@AppUser_ID INT, @StringFind NVARCHAR(128)) --OBTER UTILIZADOR NAO AMIGO DE OUTRO UTILIZADOR ONDE ID, FNAME, LNAME OU EMAIL CONTENHAM @StringFind
+CREATE PROC proj.searchNonFriend(@AppUser_ID INT, @StringFind NVARCHAR(128))
 AS
-	SELECT	@StringFind = '%' + RTRIM(@StringFind) + '%';  
+	SELECT	@StringFind = '%' + RTRIM(@StringFind) + '%';  --retirar trailing spaces
 	SELECT	* 
 	FROM	proj.getNotFriendsWithByUserID(@AppUser_ID) 
 	WHERE	(ID LIKE @StringFind) OR (Email LIKE @StringFind)  OR (Fname LIKE @StringFind) OR (Lname LIKE @StringFind);
 GO
 ;
 
-CREATE PROC proj.searchPublisher(@StringFind NVARCHAR(255)) --OBTER PUBLICADORA ONDE NIPC OU LEGAL_NAME CONTENHAM @StringFind
+CREATE PROC proj.searchPublisher(@StringFind NVARCHAR(255))
 AS
-	SELECT	@StringFind = '%' + RTRIM(@StringFind) + '%';  
+	SELECT	@StringFind = '%' + RTRIM(@StringFind) + '%';  --retirar trailing spaces
 	SELECT	* 
 	FROM	proj.Publisher 
 	WHERE	(NIPC LIKE @StringFind)  OR (Legal_Name LIKE @StringFind);
 GO
 ;
 
-CREATE PROC proj.searchGame(@Publisher_NIPC INT, @StringFind NVARCHAR(255)) --OBTER JOGO ONDE ID OU OFFICIAL_NAME CONTEM @StringFind
+CREATE PROC proj.searchGame(@Publisher_NIPC INT, @StringFind NVARCHAR(255))
 AS
-	SELECT	@StringFind = '%' + RTRIM(@StringFind) + '%';  
+	SELECT	@StringFind = '%' + RTRIM(@StringFind) + '%';  --retirar trailing spaces
 	SELECT	* 
 	FROM	proj.getGamesByPublisher(@Publisher_NIPC)
 	WHERE	(ID LIKE @StringFind) OR (Official_Name LIKE @StringFind);
 GO
 ;
 
-CREATE PROC proj.searchTool(@Publisher_NIPC INT, @StringFind NVARCHAR(255)) --OBTER APLICACAO ONDE ID OU OFFICIAL_NAME CONTEM @StringFind
+CREATE PROC proj.searchTool(@Publisher_NIPC INT, @StringFind NVARCHAR(255))
 AS
-	SELECT	@StringFind = '%' + RTRIM(@StringFind) + '%';  
+	SELECT	@StringFind = '%' + RTRIM(@StringFind) + '%';  --retirar trailing spaces
 	SELECT	* 
 	FROM	proj.getToolsByPublisher(@Publisher_NIPC)
 	WHERE	(ID LIKE @StringFind) OR (Official_Name LIKE @StringFind);
 GO
 ;
 
-CREATE PROC proj.searchItem(@StringFind NVARCHAR(255)) --OBTER ITEM ONDE UUID OU ITEM_NAME CONTEM @StringFind
+CREATE PROC proj.searchItem(@StringFind NVARCHAR(255))
 AS
-	SELECT	@StringFind = '%' + RTRIM(@StringFind) + '%';  
+	SELECT	@StringFind = '%' + RTRIM(@StringFind) + '%';  --retirar trailing spaces
 	SELECT	* 
 	FROM	proj.Show_All_Items
 	WHERE	(UUID LIKE @StringFind) OR (Item_Name LIKE @StringFind);
 GO
 ;
 
-CREATE PROC proj.searchRandomUserID(@User_ID INT OUTPUT) --OBTER ID DE UM UTILIZADOR ALEATORIO
+CREATE PROC proj.searchRandomUserID(@User_ID INT OUTPUT)
 AS
 	SELECT @User_ID = (SELECT TOP 1 ID 
 						FROM		proj.AppUser
@@ -67,7 +67,7 @@ GO
 
 
 --------------------------------CRIAR-------------------------------
-CREATE PROC proj.createAppUser(@Email NVARCHAR(128), @Fname NVARCHAR(64), @Lname NVARCHAR(64), @Birthdate DATE, @Sex NVARCHAR(1), @Street NVARCHAR(255), @Postcode NVARCHAR(64), @City NVARCHAR(255), @Country NVARCHAR(32)) --CRIAR NOVO UTILIZADOR
+CREATE PROC proj.createAppUser(@Email NVARCHAR(128), @Fname NVARCHAR(64), @Lname NVARCHAR(64), @Birthdate DATE, @Sex NVARCHAR(1), @Street NVARCHAR(255), @Postcode NVARCHAR(64), @City NVARCHAR(255), @Country NVARCHAR(32))
 AS
 	DECLARE @Balance Decimal(19, 4);
 	SET @Balance = 0;
@@ -75,14 +75,14 @@ AS
 GO
 ;
 
-CREATE PROC proj.createPublisher(@NIPC CHAR(9), @Legal_Name NVARCHAR(255), @Street NVARCHAR(255), @Postcode NVARCHAR(64), @City NVARCHAR(255), @Country NVARCHAR(32), @Found_Date DATE, @IsAllowed BIT) --CRIAR NOVA PUBLICADORA
+CREATE PROC proj.createPublisher(@NIPC CHAR(9), @Legal_Name NVARCHAR(255), @Street NVARCHAR(255), @Postcode NVARCHAR(64), @City NVARCHAR(255), @Country NVARCHAR(32), @Found_Date DATE, @IsAllowed BIT)
 AS
 	INSERT INTO proj.Publisher VALUES (@NIPC, @Legal_Name, @Street, @Postcode, @City, @Country, @Found_Date, @IsAllowed);
 GO
 ;
 
-CREATE PROC proj.createGame(@Official_Name NVARCHAR(255), @Release_Date DATE, @Publisher_NIPC CHAR(9), @Age_Rating NVARCHAR(9), @Brief_Description NVARCHAR(255), @Game_Type NVARCHAR(1024), @SupportedOS NVARCHAR(1024)) --CRIAR NOVO JOGO
-AS
+CREATE PROC proj.createGame(@Official_Name NVARCHAR(255), @Release_Date DATE, @Publisher_NIPC CHAR(9), @Age_Rating NVARCHAR(9), @Brief_Description NVARCHAR(255), @Game_Type NVARCHAR(1024), @SupportedOS NVARCHAR(1024))
+AS		
 	BEGIN TRANSACTION
 		INSERT INTO proj.Software VALUES (@Official_Name, @Release_Date, 'G', @Publisher_NIPC);
 
@@ -119,7 +119,7 @@ AS
 GO
 ;
 
-CREATE PROC proj.createTool(@Official_Name NVARCHAR(255), @Release_Date DATE, @Publisher_NIPC CHAR(9), @Current_Version	NVARCHAR(64), @Brief_Description NVARCHAR(255), @SupportedOS NVARCHAR(1024)) --CRIAR NOVA APLICAÇÃO
+CREATE PROC proj.createTool(@Official_Name NVARCHAR(255), @Release_Date DATE, @Publisher_NIPC CHAR(9), @Current_Version	NVARCHAR(64), @Brief_Description NVARCHAR(255), @SupportedOS NVARCHAR(1024))
 AS
 	BEGIN TRANSACTION
 		INSERT INTO proj.Software VALUES (@Official_Name, @Release_Date, 'T', @Publisher_NIPC);
@@ -146,7 +146,7 @@ AS
 GO
 ;
 
-CREATE PROC proj.createItem(@Item_Name NVARCHAR(64), @Rarity INT, @Market_Value	DECIMAL(19, 4), @Category INT, @Game_ID INT, @AppUser_ID INT) --CRIAR NOVO ITEM
+CREATE PROC proj.createItem(@Item_Name NVARCHAR(64), @Rarity INT, @Market_Value	DECIMAL(19, 4), @Category INT, @Game_ID INT, @AppUser_ID INT)
 AS
 	IF(@Category IN('2', '3', '4')) --Se pertencer a uma categoria que pode ser vendida
 		BEGIN
@@ -177,7 +177,7 @@ GO
 
 
 --------------------------------APAGAR-------------------------------
-CREATE PROC proj.deletePublisher(@Publisher_NIPC CHAR(9)) --APAGAR PUBLICADORA EXISTENTE
+CREATE PROC proj.deletePublisher(@Publisher_NIPC CHAR(9)) 
 AS
 	BEGIN TRANSACTION
 		DELETE FROM proj.Wishlist WHERE Software_ID IN (SELECT		ID
@@ -188,7 +188,7 @@ AS
 GO
 ;
 
-CREATE PROC proj.deleteAppUser(@AppUser_ID INT) --APAGAR UTILIZADOR EXISTENTE
+CREATE PROC proj.deleteAppUser(@AppUser_ID INT) 
 AS	
 	BEGIN TRANSACTION
 		DELETE FROM proj.AppUser WHERE ID = @AppUser_ID;
@@ -199,19 +199,19 @@ AS
 GO
 ;
 
-CREATE PROC proj.deleteGame(@Software_ID INT) --APAGAR JOGO EXISTENTE
+CREATE PROC proj.deleteGame(@Software_ID INT)
 AS	
 	DELETE FROM proj.Game WHERE Software_ID = @Software_ID;
 GO
 ;
 
-CREATE PROC proj.deleteTool(@Software_ID INT) --APAGAR APLICACAO EXISTENTE
+CREATE PROC proj.deleteTool(@Software_ID INT) 
 AS	
 	DELETE FROM proj.Tool WHERE Software_ID = @Software_ID;
 GO
 ;
 
-CREATE PROC proj.deleteItem(@UUID NVARCHAR(50), @AppUser_ID INT) --APAGAR ITEM EXISTENTE
+CREATE PROC proj.deleteItem(@UUID NVARCHAR(50), @AppUser_ID INT)
 AS	
 	DECLARE @Market_Value DECIMAL(19, 4);
 	SET @Market_Value = (SELECT Market_Value FROM proj.Item WHERE UUID=@UUID);
@@ -236,13 +236,13 @@ GO
 
 
 --------------------------------ADICIONAR-----------------------------
-CREATE PROC proj.addStore_Software(@Software_ID INT, @Price DECIMAL(19, 4)) --ADICIONAR SOFTWARE A LOJA
+CREATE PROC proj.addStore_Software(@Software_ID INT, @Price DECIMAL(19, 4))
 AS	
 	INSERT INTO proj.Store_Software(Software_ID, Price) VALUES (@Software_ID, @Price);
 GO
 ;
 
-CREATE PROC proj.addAuthorizationList(@Publisher_NIPC CHAR(9)) --ADICIONAR PUBLICADORA A LISTA DE AUTORIZACAO
+CREATE PROC proj.addAuthorizationList(@Publisher_NIPC CHAR(9))
 AS
 	BEGIN TRANSACTION
 		UPDATE proj.Publisher SET IsAllowed='1' WHERE NIPC=@Publisher_NIPC;
@@ -251,7 +251,7 @@ AS
 GO
 ;
 
-CREATE PROC proj.addBalance(@AppUser_ID INT, @Value DECIMAL(19, 4)) --ADICIONAR SALDO A CARTEIRA DE UM UTILIZADOR
+CREATE PROC proj.addBalance(@AppUser_ID INT, @Value DECIMAL(19, 4))
 AS
 	DECLARE @User_Balance AS DECIMAL(19, 4);
 	SET @User_Balance = (SELECT Balance FROM proj.AppUser WHERE ID=@AppUser_ID);
@@ -263,7 +263,7 @@ AS
 GO
 ;
 
-CREATE PROC proj.addFriend(@AppUser_ID1 INT, @AppUser_ID2 INT) --ADICIONAR UTILIZADOR A LISTA DE AMIGOS
+CREATE PROC proj.addFriend(@AppUser_ID1 INT, @AppUser_ID2 INT) 
 AS
 	BEGIN TRANSACTION
 		INSERT INTO proj.FriendsList(AppUser_ID1, AppUser_ID2) VALUES (@Appuser_ID1, @AppUser_ID2);
@@ -272,7 +272,7 @@ AS
 GO
 ;
 
-CREATE PROC proj.addWishlist(@AppUser_ID INT, @Software_ID INT) --ADICIONAR SOFTWARE A LISTA DE DESEJOS
+CREATE PROC proj.addWishlist(@AppUser_ID INT, @Software_ID INT)
 AS
 	INSERT INTO proj.Wishlist(AppUser_ID, Software_ID) VALUES (@Appuser_ID, @Software_ID);
 GO
@@ -280,7 +280,7 @@ GO
 
 
 -----------------------------REMOVER-------------------------------
-CREATE PROC proj.removeStoreSoftware(@Software_ID INT) --REMOVER SOFTWARE DA LOJA
+CREATE PROC proj.removeStoreSoftware(@Software_ID INT)
 AS
 	BEGIN TRANSACTION
 		DELETE FROM proj.Wishlist WHERE Software_ID=@Software_ID;
@@ -289,7 +289,7 @@ AS
 GO
 ;
 
-CREATE PROC proj.removeAuthorizationList(@Publisher_NIPC CHAR(9)) --REMOVER PUBLICADORA DA LISTA DE AUTORIZACAO
+CREATE PROC proj.removeAuthorizationList(@Publisher_NIPC CHAR(9))
 AS
 	BEGIN TRANSACTION
 		DELETE FROM proj.Wishlist WHERE Software_ID IN (SELECT	Software_ID 
@@ -308,7 +308,7 @@ AS
 GO
 ;
 
-CREATE PROC proj.removeFriend(@AppUser_ID1 INT, @AppUser_ID2 INT) --REMOVER UTILIZADOR DA LISTA DE AMIGOS
+CREATE PROC proj.removeFriend(@AppUser_ID1 INT, @AppUser_ID2 INT)
 AS	
 	BEGIN TRANSACTION
 		DELETE FROM proj.FriendsList WHERE (AppUser_ID1 = @AppUser_ID1) AND (AppUser_ID2 = @AppUser_ID2);
@@ -317,13 +317,13 @@ AS
 GO
 ;
 
-CREATE PROC proj.removeWishlist(@AppUser_ID INT, @Software_ID INT) --REMOVER SOFTWARE DA LISTA DE DESEJOS
+CREATE PROC proj.removeWishlist(@AppUser_ID INT, @Software_ID INT)
 AS
 	DELETE FROM proj.Wishlist WHERE (AppUser_ID=@Appuser_ID) AND (Software_ID=@Software_ID);
 GO
 ;
 
-CREATE PROC proj.removeItemFromMarket(@Item_UUID NVARCHAR(50)) --REMOVER ITEM DO MERCADO
+CREATE PROC proj.removeItemFromMarket(@Item_UUID NVARCHAR(50))
 AS
 	BEGIN TRANSACTION
 		DELETE FROM proj.Market_Items WHERE Item_UUID=@Item_UUID;
@@ -334,25 +334,25 @@ GO
 
 
 --------------------------------EDITAR-------------------------------
-CREATE PROC proj.editSoftwarePrice(@Software_ID INT, @New_Price DECIMAL(19, 4)) --EDITAR PREÇO DO SOFTWARE NA LOJA
+CREATE PROC proj.editSoftwarePrice(@Software_ID INT, @New_Price DECIMAL(19, 4))
 AS
 	UPDATE proj.Store_Software SET Price=@New_Price WHERE Software_ID=@Software_ID;
 GO
 ;
 
-CREATE PROC proj.editAppUser(@AppUser_ID INT, @Email NVARCHAR(128), @Fname NVARCHAR(64), @Lname NVARCHAR(64), @Birthdate DATE, @Sex NVARCHAR(1), @Street NVARCHAR(255), @Postcode NVARCHAR(64), @City NVARCHAR(255), @Country NVARCHAR(32)) --EDITAR UTILIZADOR
+CREATE PROC proj.editAppUser(@AppUser_ID INT, @Email NVARCHAR(128), @Fname NVARCHAR(64), @Lname NVARCHAR(64), @Birthdate DATE, @Sex NVARCHAR(1), @Street NVARCHAR(255), @Postcode NVARCHAR(64), @City NVARCHAR(255), @Country NVARCHAR(32))
 AS
 	UPDATE proj.AppUser SET Email=@Email, Fname=@Fname, Lname=@Lname, Birthdate=@Birthdate, Sex=@Sex, Street=@Street, Postcode=@Postcode, City=@City, Country=@Country WHERE ID=@AppUser_ID;
 GO
 ;
 
-CREATE PROC proj.editPublisher(@CurrentNIPC CHAR(9), @NewNIPC CHAR(9), @Legal_Name	NVARCHAR(255), @Street NVARCHAR(255), @Postcode NVARCHAR(64), @City	NVARCHAR(255), @Country	NVARCHAR(32), @IsAllowed BIT) --EDITAR PUBLICADORA EXISTENTE
+CREATE PROC proj.editPublisher(@CurrentNIPC CHAR(9), @NewNIPC CHAR(9), @Legal_Name	NVARCHAR(255), @Street NVARCHAR(255), @Postcode NVARCHAR(64), @City	NVARCHAR(255), @Country	NVARCHAR(32), @IsAllowed BIT)
 AS
 	UPDATE proj.Publisher SET NIPC=@NewNIPC, Legal_Name=@Legal_Name, Street=@Street, Postcode=@Postcode, City=@City, Country=@Country, IsAllowed=@IsAllowed WHERE NIPC=@CurrentNIPC;
 GO
 ;
 
-CREATE PROC proj.editGame(@Software_ID INT, @Official_Name NVARCHAR(255), @Release_Date DATE, @Age_Rating NVARCHAR(9), @Brief_Description NVARCHAR(255), @Game_Type NVARCHAR(1024), @SupportedOS NVARCHAR(1024)) --EDITAR JOGO EXISTENTE
+CREATE PROC proj.editGame(@Software_ID INT, @Official_Name NVARCHAR(255), @Release_Date DATE, @Age_Rating NVARCHAR(9), @Brief_Description NVARCHAR(255), @Game_Type NVARCHAR(1024), @SupportedOS NVARCHAR(1024))
 AS
 	BEGIN TRANSACTION
 		UPDATE proj.Game SET Age_Rating=@Age_Rating, Brief_Description=@Brief_Description WHERE Software_ID=@Software_ID;
@@ -388,7 +388,7 @@ AS
 GO
 ;
 
-CREATE PROC proj.editTool(@Software_ID INT, @Official_Name NVARCHAR(255), @Release_Date DATE, @Current_Version NVARCHAR(9), @Brief_Description NVARCHAR(255), @SupportedOS NVARCHAR(1024)) --EDITAR JOGO EXISTENTE
+CREATE PROC proj.editTool(@Software_ID INT, @Official_Name NVARCHAR(255), @Release_Date DATE, @Current_Version NVARCHAR(9), @Brief_Description NVARCHAR(255), @SupportedOS NVARCHAR(1024))
 AS
 	BEGIN TRANSACTION
 		UPDATE proj.Tool SET Current_Version=@Current_Version, Brief_Description=@Brief_Description WHERE Software_ID=@Software_ID;
@@ -412,7 +412,7 @@ AS
 GO
 ;
 
-CREATE PROC proj.editItem(@UUID NVARCHAR(50), @Item_Name NVARCHAR(64), @Rarity INT, @Market_Value DECIMAL(19, 4), @Category INT, @Game_ID INT, @AppUser_ID INT) --EDITAR ITEM
+CREATE PROC proj.editItem(@UUID NVARCHAR(50), @Item_Name NVARCHAR(64), @Rarity INT, @Market_Value DECIMAL(19, 4), @Category INT, @Game_ID INT, @AppUser_ID INT)
 AS
 	IF(@Category IN('2', '3', '4')) --Se pertencer a uma categoria que pode ser vendida
 		UPDATE proj.Item SET Item_Name=@Item_Name, Rarity=@Rarity, Market_Value=@Market_Value, Category=@Category, Game_ID=@Game_ID WHERE UUID=@UUID;
@@ -423,7 +423,7 @@ GO
 
 
 --------------------------------VARIOS-------------------------------
-CREATE PROC proj.buySoftware(@AppUser_ID INT, @Software_ID INT) --COMPRAR SOFTWARE DA LOJA
+CREATE PROC proj.buySoftware(@AppUser_ID INT, @Software_ID INT)
 AS
 		DECLARE @Cost AS DECIMAL(19, 4);
 		SET @Cost = (SELECT Price FROM proj.Store_Software WHERE Software_ID=@Software_ID);
@@ -446,7 +446,7 @@ AS
 GO
 ;
 
-CREATE PROC proj.returnSoftware(@AppUser_ID INT, @Software_SKU NVARCHAR(50)) --DEVOLVER SOFTWARE A LOJA
+CREATE PROC proj.returnSoftware(@AppUser_ID INT, @Software_SKU NVARCHAR(50))
 AS
 	DECLARE @Purchase_ID AS INT;
 	SET @Purchase_ID = (SELECT ID FROM proj.Purchases WHERE SKU=@Software_SKU);
@@ -467,7 +467,7 @@ AS
 GO
 ;
 
-CREATE PROC proj.buyMarketItem(@Buyer_ID INT, @Item_UUID NVARCHAR(50)) --COMPRAR ITEM DO MERCADO
+CREATE PROC proj.buyMarketItem(@Buyer_ID INT, @Item_UUID NVARCHAR(50))
 AS
 	DECLARE @Cost AS DECIMAL(19, 4);
 	SET @Cost = (SELECT Market_Value FROM proj.Market_Items INNER JOIN proj.Item ON proj.Market_Items.Item_UUID=proj.Item.UUID WHERE proj.Market_Items.Item_UUID=@Item_UUID);
@@ -503,7 +503,7 @@ AS
 GO
 ;
 
-CREATE PROC proj.sellMarketItem(@Seller_ID INT, @Item_UUID NVARCHAR(50)) --POR ITEM A VENDA NO MERCADO
+CREATE PROC proj.sellMarketItem(@Item_UUID NVARCHAR(50))
 AS
 		DECLARE @CanBeSold AS BIT;
 		SET @CanBeSold = (SELECT CanBeSold FROM proj.Item INNER JOIN proj.Item_Category ON proj.Item.Category=proj.Item_Category.ID WHERE proj.Item.UUID=@Item_UUID);
@@ -511,7 +511,7 @@ AS
 		IF(@CanBeSold = '1')
 			BEGIN
 				BEGIN TRANSACTION
-					INSERT INTO proj.Market_Items VALUES (@Seller_ID, @Item_UUID);
+					INSERT INTO proj.Market_Items VALUES ('1', @Item_UUID);
 					UPDATE proj.Item SET ForSale = 'Y' WHERE UUID=@Item_UUID;
 				COMMIT TRANSACTION
 			END
