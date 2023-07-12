@@ -20,6 +20,3 @@ The [**database**](Database_SQL) is implemented in TSQL, using SQL Server Manage
 ### Detailed description/usage
 Read the project report -> [**Report_BD.pdf**](Report_BD.pdf) <br/>
 Read the presentation and watch the demo videos -> [**Presentation**](Presentation)
-
-### Programming/Scripting/Markup Languages
-`C#` `TSQL` 
